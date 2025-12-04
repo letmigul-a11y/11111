@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>ЛР 8</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: white; color: #000; padding: 20px; }
+        
+        /* ЧАСТИНА 1: ВКЛАДКИ */
+        #tabs { width: 400px; margin-bottom: 40px; border: 1px solid #707070; border-radius: 3px; }
+        #tabs .tab {
+            display: inline-block;
+            padding: 5px 10px;
+            cursor: pointer;
+            position: relative;
+            z-index: 5;
+            background-color: #f0f0f0;
+            color: #555;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        #tabs .whiteborder {
+            border: 1px solid #707070; /* Рамка активної вкладки [cite: 210] */
+            border-bottom: 1px solid #fff; /* Приховуємо нижню рамку [cite: 211] */
+            background-color: white;
+            color: #000;
+        }
+        
+        #tabs .tabContent {
+            width: 398px; /* 400px - 2px рамка */
+            height: 60px;
+            border: 1px solid #707070; [cite: 228]
+            position: relative; [cite: 229]
+            padding: 10px; [cite: 230]
+            top: -1px; [cite: 222]
+            z-index: 1; [cite: 224]
+            background-color: white;
+            border-radius: 0 0 3px 3px; [cite: 231]
+        }
+        #tabs .hide { display: none; } [cite: 237]
+        #tabs .show { display: block; } [cite: 242]
+
+        /* ЧАСТИНА 2: ГЕНЕРАТОР */
+        .generator-container { padding: 10px; width: 450px; }
+        .control-row { margin-bottom: 10px; display: flex; align-items: center; }
+        .control-row label { width: 150px; }
+        
+        input[type="range"] { flex-grow: 1; margin-right: 10px; }
+        input[type="text"] { width: 40px; padding: 5px; border: 1px solid #707070; }
+        
+        #block13 { width: 100px; height: 100px; background: green; margin-top: 20px; float: left; margin-right: 20px; }
+        #cssCode13 { width: 250px; height: 100px; border: 1px solid #707070; font-family: monospace; padding: 5px; resize: none; }
+    </style>
+</head>
+<body>
+
+    <h2>1. Вкладки (Класичний стиль)</h2>
+    <div id="tabs">
+        <div class="tab whiteborder">Tab 1</div>
+        <div class="tab">Tab 2</div>
+        <div class="tab">Tab 3</div>
+
+        <div class="tabContent show">Вміст 1</div>
+        <div class="tabContent hide">Вміст 2</div>
+        <div class="tabContent hide">Вміст 3</div>
+    </div>
+    
+    <hr>
+    
+    <h2>2. CSS Генератор (Border-radius)</h2>
+    <div class="generator-container">
+        
+        <div class="control-row">
+            <label for="rtl13">Верхній лівий радіус:</label>
+            <input type="range" id="r_rtl13" min="0" max="100" value="0" oninput="generate13()">
+            <input type="text" id="t_rtl13" value="0" oninput="updateRangeFromText13(this, 'r_rtl13')">
+        </div>
+        <div class="control-row">
+            <label for="rtr13">Верхній правий радіус:</label>
+            <input type="range" id="r_rtr13" min="0" max="100" value="0" oninput="generate13()">
+            <input type="text" id="t_rtr13" value="0" oninput="updateRangeFromText13(this, 'r_rtr13')">
+        </div>
+        <div class="control-row">
+            <label for="rbr13">Нижній правий радіус:</label>
+            <input type="range" id="r_rbr13" min="0" max="100" value="0" oninput="generate13()">
+            <input type="text" id="t_rbr13" value="0" oninput="updateRangeFromText13(this, 'r_rbr13')">
+        </div>
+        <div class="control-row">
+            <label for="rbl13">Нижній лівий радіус:</label>
+            <input type="range" id="r_rbl13" min="0" max="100" value="0" oninput="generate13()">
+            <input type="text" id="t_rbl13" value="0" oninput="updateRangeFromText13(this, 'r_rbl13')">
+        </div>
+
+        <div style="overflow: hidden; display: flex; align-items: flex-start;">
+            <div id="block13"></div>
+            <div>
+                Code:
+                <textarea id="cssCode13" placeholder="border-radius: 0px 0px 0px 0px;"></textarea>
+            </div>
+        </div>
+    </div>
+
+<script>
+// --- ЧАСТИНА 1: ВКЛАДКИ (КОД ІДЕНТИЧНИЙ ВАРІАНТУ 11) ---
+
+let tab13; 
+let tabContent13; 
+
+function hideTabsContent13(a) {
+    for (let i = a; i < tabContent13.length; i++) {
+        tabContent13[i].classList.remove('show');
+        tabContent13[i].classList.add("hide");
+        tab13[i].classList.remove('whiteborder');
+    }
+}
+
+function showTabsContent13(b) {
+    if (tabContent13[b].classList.contains('hide')) {
+        hideTabsContent13(0); 
+        tab13[b].classList.add('whiteborder');
+        tabContent13[b].classList.remove('hide');
+        tabContent13[b].classList.add('show');
+    }
+}
+
+window.onload = function() {
+    tabContent13 = document.getElementsByClassName('tabContent');
+    tab13 = document.getElementsByClassName('tab');
+    hideTabsContent13(1); 
+    
+    document.getElementById('tabs').onclick = function(event) {
+        let target = event.target;
+        if (target.className.includes('tab')) {
+            for (let i = 0; i < tab13.length; i++) {
+                if (target == tab13[i]) {
+                    showTabsContent13(i);
+                    break;
+                }
+            }
+        }
+    };
+    
+    // Ініціалізація генератора
+    generate13();
+};
+
+// --- ЧАСТИНА 2: CSS ГЕНЕРАТОР (РІВЕНЬ 1) ---
+const ids13 = ['rtl', 'rtr', 'rbr', 'rbl']; // ID для повзунків
+
+function updateRangeFromText13(textInput, rangeId) {
+    const rangeInput = document.getElementById(rangeId);
+    const value = parseInt(textInput.value) || 0;
+    rangeInput.value = Math.min(Math.max(0, value), 100);
+    generate13();
+}
+
+function generate13() {
+    const block = document.getElementById('block13');
+    const cssCode = document.getElementById('cssCode13');
+    let radiusValues = [];
+
+    // 1. Оновлення значень input type="text" зі значень повзунків [cite: 387]
+    ids13.forEach(id => {
+        const rVal = document.getElementById(`r_${id}13`).value;
+        document.getElementById(`t_${id}13`).value = rVal;
+        radiusValues.push(rVal);
+    });
+
+    const [rtl, rtr, rbr, rbl] = radiusValues;
+    
+    // 2. Генерація CSS та застосування стилів [cite: 390]
+    const borderRadiusCSS = `${rtl}px ${rtr}px ${rbr}px ${rbl}px`;
+    const cssOutput = `border-radius: ${borderRadiusCSS};`;
+
+    // Застосування стилю до блоку
+    block.style.borderRadius = borderRadiusCSS; 
+
+    // 3. Виведення коду в textarea [cite: 401]
+    cssCode.value = cssOutput;
+}
+</script>
+</body>
+</html>

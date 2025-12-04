@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Асинхронні операції (Promise API)</title>
+    <style>
+        body { font-family: Georgia, serif; background-color: #f7f9f9; color: #333; padding: 30px; }
+        .task-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        h3 { color: #007bff; border-bottom: 1px solid #007bff; padding-bottom: 5px; }
+        .loader { display: none; font-size: 1.1em; color: #007bff; font-style: italic; margin-top: 10px; }
+        #result_a3 { margin-top: 15px; padding: 10px; background-color: #e9ecef; border-radius: 3px; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <h1>Використання JavaScript Promise API</h1>
+    
+    <div class="task-box">
+        <h3>Завдання 1: "Hello, World!"</h3>
+        <button onclick="executeTask1_a3()">Почати асинхронну операцію</button>
+    </div>
+
+    <div id="loader_a3" class="loader">Завантаження....</div>
+    <div id="result_a3"></div>
+
+<script>
+// --- Завдання 0: Функції керування ---
+const loader_a3 = document.getElementById('loader_a3');
+const resultDiv_a3 = document.getElementById('result_a3');
+
+function showLoader_a3() {
+    resultDiv_a3.textContent = '';
+    loader_a3.style.display = 'block'; [cite_start]// Перед запуском Promise відобразіть лоадер [cite: 570]
+}
+
+function hideLoader_a3(message) {
+    loader_a3.style.display = 'none'; [cite_start]// Сховайте лоадер [cite: 571]
+    resultDiv_a3.textContent = message; [cite_start]// Виведіть результат [cite: 571]
+}
+
+// --- Завдання 1: Hello, World! [cite_start]через 2с [cite: 573] ---
+function executeTask1_a3() {
+    showLoader_a3();
+    
+    const myPromise = new Promise(resolve => {
+        [cite_start]// Promise виконується через 2 секунди [cite: 573]
+        setTimeout(() => {
+            [cite_start]resolve("Hello, World!"); // та повертає значення "Hello, World!" [cite: 573]
+        }, 2000);
+    });
+
+    myPromise
+        // Обробка успіху
+        .then(result => hideLoader_a3(`Результат Завдання 1: ${result}`))
+        // Обробка помилки
+        .catch(error => hideLoader_a3(`Помилка Завдання 1: ${error}`));
+}
+</script>
+</body>
+</html>

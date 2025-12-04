@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ЛР3</title>
+</head>
+<body>
+    <div>
+        <h3>1. Формування привітання</h3>
+        <button onclick="startFirstTask()">Запустити</button>
+        <div id="output1"></div>
+    </div>
+
+    <div>
+        <h3>2. Система оцінювання</h3>
+        <button onclick="startSecondTask()">Запустити</button>
+        <div id="output2"></div>
+    </div>
+
+    <div>
+        <h3>3. Калькулятор чайових</h3>
+        <button onclick="startThirdTask()">Запустити</button>
+        <div id="output3"></div>
+    </div>
+
+    <script>
+        function createFullName(first, last) {
+            return `${first} ${last}`;
+        }
+
+        function displayGreeting(name, years) {
+            const text = `Hello, ${name}! You are ${years} years old.`;
+            return text;
+        }
+
+        function startFirstTask() {
+            const first = prompt("Ваше ім'я:");
+            const last = prompt("Ваше прізвище:");
+            const age = prompt("Ваш вік:");
+            
+            if (first && last && age) {
+                const fullName = createFullName(first, last);
+                const greeting = displayGreeting(fullName, age);
+                alert(greeting);
+                document.getElementById('output1').innerHTML = `<b>${greeting}</b>`;
+            }
+        }
+        function inputStudentData() {
+            const studentName = prompt("Ім'я студента:");
+            const points = prompt("Бал (0-12):");
+            return {studentName, points: Number(points)};
+        }
+
+        function determineGrade(points) {
+            if (points >= 10) return "Excellent";
+            if (points >= 7) return "Good";
+            if (points >= 4) return "Satisfactory";
+            return "Fail";
+        }
+
+        function displayGradeInfo(name, evaluation) {
+            return `Student: ${name}\nGrade: ${evaluation}`;
+        }
+
+        function startSecondTask() {
+            const data = inputStudentData();
+            if (data.studentName && data.points) {
+                const evaluation = determineGrade(data.points);
+                const info = displayGradeInfo(data.studentName, evaluation);
+                alert(info);
+                document.getElementById('output2').innerHTML = info.replace("\n", "<br>");
+            }
+        }
+        function computeTip(sum, percentage = 10) {
+            return (sum * percentage) / 100;
+        }
+
+        function displayBillInfo(sum, tips) {
+            const total = sum + tips;
+            return `Bill: ${sum} грн\nTip (10%): ${tips.toFixed(2)} грн\nTotal: ${total.toFixed(2)} грн`;
+        }
+
+        function startThirdTask() {
+            const billAmount = parseFloat(prompt("Сума рахунку:"));
+            if (billAmount) {
+                const tips = computeTip(billAmount);
+                const billInfo = displayBillInfo(billAmount, tips);
+                alert(billInfo);
+                document.getElementById('output3').innerHTML = billInfo.replace(/\n/g, "<br>");
+            }
+        }
+    </script>
+</body>
+</html>

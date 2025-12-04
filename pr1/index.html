@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products and Students</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Products</h2>
+    <button onclick="displayAvailableProducts()">Show Available Products</button>
+    <input type="text" id="productName" placeholder="Enter product name">
+    <button onclick="findAndDisplayProduct()">Find Product</button>
+    <div id="productResult" class="result"></div>
+
+    <h2>Students</h2>
+    <button onclick="displayGroupedStudents()">Show Grouped Students</button>
+    <button onclick="displaySortedStudents()">Show Sorted Students</button>
+    <div id="studentResult" class="result"></div>
+
+    <script>
+        // Завдання 1: Фільтрація та пошук у масиві об'єктів
+        const products = [
+            { name: "Laptop", category: "Electronics", price: 1200, inStock: 5 },
+            { name: "Book", category: "Books", price: 15, inStock: 0 },
+            { name: "Phone", category: "Electronics", price: 800, inStock: 3 },
+            { name: "Tablet", category: "Electronics", price: 400, inStock: 2 }
+        ];
+
+        function getAvailableProducts() {
+            return products.filter(product => product.inStock > 0);
+        }
+
+        function findProductByName(name) {
+            const product = products.find(product => product.name.toLowerCase() === name.toLowerCase());
+            return product || "Товар не знайдено";
+        }
+
+        function displayAvailableProducts() {
+            const available = getAvailableProducts();
+            document.getElementById("productResult").innerHTML = 
+                "Доступні товари: " + JSON.stringify(available);
+        }
+
+        function findAndDisplayProduct() {
+            const name = document.getElementById("productName").value;
+            const result = findProductByName(name);
+            document.getElementById("productResult").innerHTML = 
+                "Результат пошуку: " + (typeof result === "object" ? JSON.stringify(result) : result);
+        }
+
+        // Завдання 2: Групування та сортування масиву об'єктів
+        const students = [
+            { name: "Олег", age: 20, grade: 85, group: "A1" },
+            { name: "Марія", age: 19, grade: 92, group: "A2" },
+            { name: "Петро", age: 21, grade: 78, group: "A1" },
+            { name: "Анна", age: 20, grade: 95, group: "A2" }
+        ];
+
+        function groupBy() {
+            return students.reduce((acc, student) => {
+                if (!acc[student.group]) acc[student.group] = [];
+                acc[student.group].push(student);
+                return acc;
+            }, {});
+        }
+
+        function sortStudentsByGrade(studentsArray) {
+            return [...studentsArray].sort((a, b) => b.grade - a.grade);
+        }
+
+        function displayGroupedStudents() {
+            const grouped = groupBy();
+            document.getElementById("studentResult").innerHTML = 
+                "Групи студентів: " + JSON.stringify(grouped, null, 2);
+        }
+
+        function displaySortedStudents() {
+            const sorted = sortStudentsByGrade(students);
+            document.getElementById("studentResult").innerHTML = 
+                "Відсортовані студенти: " + JSON.stringify(sorted, null, 2);
+        }
+    </script>
+</body>
+</html>

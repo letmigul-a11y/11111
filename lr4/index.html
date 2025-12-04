@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Гардероб</title>
+</head>
+<body>
+    <h1>Управління гардеробом</h1>
+
+    <div>
+        <button onclick="showAllClothes()">Весь одяг</button>
+        <button onclick="showCleanClothes()">Чистий одяг</button>
+        <button onclick="showBySeason('літо')">Літній</button>
+        <button onclick="showBySeason('зима')">Зимовий</button>
+        <button onclick="showByType('футболка')">Футболки</button>
+        <button onclick="wearRandomItem()">Одягнути випадково</button>
+        <button onclick="washAllClothes()">Постирати все</button>
+    </div>
+
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        const wardrobe = [
+            {
+                type: "футболка",
+                color: "білий", 
+                size: "M",
+                season: "літо",
+                isWorn: false,
+                wear: function() {
+                    this.isWorn = true;
+                    return `Одягнуто ${this.color} ${this.type}`;
+                },
+                wash: function() {
+                    this.isWorn = false;
+                    return `Постирано ${this.color} ${this.type}`;
+                }
+            },
+            {
+                type: "джинси",
+                color: "синій",
+                size: "L", 
+                season: "демісезон",
+                isWorn: true,
+                wear: function() {
+                    this.isWorn = true;
+                    return `Одягнуто ${this.color} ${this.type}`;
+                },
+                wash: function() {
+                    this.isWorn = false;
+                    return `Постирано ${this.color} ${this.type}`;
+                }
+            },
+            {
+                type: "куртка",
+                color: "чорний",
+                size: "XL",
+                season: "зима", 
+                isWorn: false,
+                wear: function() {
+                    this.isWorn = true;
+                    return `Одягнуто ${this.color} ${this.type}`;
+                },
+                wash: function() {
+                    this.isWorn = false;
+                    return `Постирано ${this.color} ${this.type}`;
+                }
+            },
+            {
+                type: "шорти",
+                color: "чорний",
+                size: "M",
+                season: "літо",
+                isWorn: true,
+                wear: function() {
+                    this.isWorn = true;
+                    return `Одягнуто ${this.color} ${this.type}`;
+                },
+                wash: function() {
+                    this.isWorn = false;
+                    return `Постирано ${this.color} ${this.type}`;
+                }
+            },
+            {
+                type: "светр",
+                color: "сірий",
+                size: "L",
+                season: "зима",
+                isWorn: false,
+                wear: function() {
+                    this.isWorn = true;
+                    return `Одягнуто ${this.color} ${this.type}`;
+                },
+                wash: function() {
+                    this.isWorn = false;
+                    return `Постирано ${this.color} ${this.type}`;
+                }
+            },
+            {
+                type: "футболка",
+                color: "чорний",
+                size: "S",
+                season: "літо",
+                isWorn: true,
+                wear: function() {
+                    this.isWorn = true;
+                    return `Одягнуто ${this.color} ${this.type}`;
+                },
+                wash: function() {
+                    this.isWorn = false;
+                    return `Постирано ${this.color} ${this.type}`;
+                }
+            }
+        ];
+
+        function showAllClothes() {
+            displayResult("Весь одяг у гардеробі", wardrobe);
+        }
+
+        function showCleanClothes() {
+            const cleanClothes = wardrobe.filter(item => !item.isWorn);
+            displayResult("Чистий одяг (не одягнутий)", cleanClothes);
+        }
+
+        function showBySeason(season) {
+            const seasonalClothes = wardrobe.filter(item => item.season === season);
+            const seasonName = season === 'літо' ? 'Літній' : 'Зимовий';
+            displayResult(`${seasonName} одяг`, seasonalClothes);
+        }
+
+        function showByType(type) {
+            const typedClothes = wardrobe.filter(item => item.type === type);
+            displayResult(type.charAt(0).toUpperCase() + type.slice(1), typedClothes);
+        }
+
+        function wearRandomItem() {
+            const cleanClothes = wardrobe.filter(item => !item.isWorn);
+            
+            if (cleanClothes.length === 0) {
+                displayMessage("Весь одяг вже одягнутий! Треба постирати.");
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * cleanClothes.length);
+            const item = cleanClothes[randomIndex];
+            const message = item.wear();
+            
+            displayMessage(message);
+        }
+
+        function washAllClothes() {
+            wardrobe.forEach(item => {
+                item.wash();
+            });
+            displayMessage("Весь одяг постираний і готовий до носіння!");
+        }
+
+        function displayResult(title, items) {
+            const resultDiv = document.getElementById('result');
+            
+            if (items.length === 0) {
+                resultDiv.innerHTML = `<h3>${title}</h3><p>Нічого не знайдено</p>`;
+                return;
+            }
+
+            let html = `<h3>${title} (${items.length} шт.)</h3>`;
+            html += '<ul>';
+            
+            items.forEach(item => {
+                const status = item.isWorn ? '🔴 одягнуто' : '🟢 чистий';
+                html += `<li>${item.color} ${item.type} (${item.size}) - ${item.season} - ${status}</li>`;
+            });
+            
+            html += '</ul>';
+            resultDiv.innerHTML = html;
+        }
+
+        function displayMessage(message) {
+            document.getElementById('result').innerHTML = `<h3>${message}</h3>`;
+        }
+
+        // Показати весь одяг при завантаженні
+        showAllClothes();
+    </script>
+</body>
+</html>

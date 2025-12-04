@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Простий GPS-Трекер - Версія C</title>
+    <style>
+        body { font-family: Georgia, serif; background-color: #f7f9f9; color: #333; padding: 30px; }
+        .info-block { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; background: white; border-radius: 5px; }
+        h2 { color: #007bff; border-bottom: 1px solid #007bff; padding-bottom: 5px; }
+        #output-coords { font-size: 1.1em; font-weight: bold; margin-bottom: 10px; }
+        .action-buttons button { padding: 8px 15px; margin-right: 10px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px; }
+        #error-msg-c { color: red; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h2>Geolocation Watch (Рівень I)</h2>
+    
+    <div class="action-buttons">
+        <button id="start-c">Почати слідкування</button>
+        <button id="stop-c">Припинити слідкування</button>
+    </div>
+
+    <div class="info-block">
+        <div id="output-coords">Ваша позиція буде тут.</div>
+        <div id="output-distance">Дистанція до точки X.</div>
+    </div>
+
+<script>
+let watchID_C = null;
+const targetCoords_C = { latitude: 48.94321, longitude: 24.73380 };
+
+// Частина 1: Завдання 3 - Формула Гаверсинуса
+function getDistance(c1, c2) {
+    const R = 6371;
+    const rad = (deg) => (deg * Math.PI) / 180;
+    const lat1 = rad(c1.latitude);
+    const lat2 = rad(c2.latitude);
+    const dLon = rad(c1.longitude - c2.longitude);
+
+    const dist = Math.acos(
+        Math.sin(lat1) * Math.sin(lat2) +
+        Math.cos(lat1) * Math.cos(lat2) * Math.cos(dLon)
+    ) * R;
+    return dist;
+}
+
+function successHandlerC(position) {
+    const { latitude, longitude } = position.coords;
+    
+    // Частина 1: Вивід координат
+    document.getElementById("output-coords").innerHTML = 
+        `Широта: ${latitude.toFixed(6)}, Довгота: ${longitude.toFixed(6)}`;
+    
+    // Частина 1: Розрахунок дистанції
+    const km = getDistance(position.coords, targetCoords_C);
+    document.getElementById("output-distance").innerHTML = 
+        `Ви знаходитесь за ${km.toFixed(4)} км від точки X.`;
+}
+
+function errorHandlerC(error) {
+    const msgs = { 1: "Доступ заборонено", 2: "Позиція недоступна", 3: "Таймаут" };
+    const errMsg = msgs[error.code] || "Невідома помилка";
+    document.getElementById("output-coords").innerHTML = `<span id="error-msg-c">Помилка: ${errMsg}</span>`;
+}
+
+// --- Обробники кнопок (Частина 2: Watch/Clear) ---
+
+document.getElementById("start-c").onclick = () => {
+    if (navigator.geolocation && !watchID_C) {
+        // Частина 2: watchPosition
+        watchID_C = navigator.geolocation.watchPosition(successHandlerC, errorHandlerC);
+        document.getElementById("output-coords").innerHTML = "Слідкування розпочато...";
+    }
+};
+
+document.getElementById("stop-c").onclick = () => {
+    if (watchID_C) {
+        // Частина 2: clearWatch
+        navigator.geolocation.clearWatch(watchID_C);
+        watchID_C = null;
+        document.getElementById("output-coords").innerHTML = "Слідкування припинено.";
+    }
+};
+
+// Одноразове отримання при старті
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successHandlerC, errorHandlerC);
+}
+
+</script>
+</body>
+</html>

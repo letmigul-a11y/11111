@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Date API - Версія C (Базовий)</title>
+    <style>
+        body { font-family: Georgia, serif; background-color: #f7f9f9; color: #333; padding: 30px; }
+        .task-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        h3 { color: #007bff; border-bottom: 1px solid #007bff; padding-bottom: 5px; }
+        .result { margin-top: 10px; padding: 5px; background-color: #e9ecef; border-radius: 3px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h1>JavaScript Date API (Базові методи)</h1>
+    
+    <div class="task-box">
+        <h3>1. Створення конкретної дати</h3>
+        <div id="date1_output_c" class="result"></div>
+    </div>
+
+    <div class="task-box">
+        <h3>2. Визначення дня тижня</h3>
+        <p>Дата 10.05.2023: <span id="weekday_output_c" class="result"></span></p>
+    </div>
+
+    <div class="task-box">
+        <h3>3. Останній день місяця</h3>
+        <p>2023 рік, Січень: <span id="lastday_output_c" class="result"></span></p>
+    </div>
+
+<script>
+// --- Завдання 1: Створення конкретної дати ---
+const specificDateC = new Date(2021, 1, 20, 3, 12, 0, 0); [cite_start]// 20 лютого 2021, 3:12 ранку [cite: 869]
+document.getElementById('date1_output_c').textContent = specificDateC.toLocaleString(); [cite_start]// [cite: 870, 772]
+
+// --- Завдання 2: getWeekDay(date) ---
+function getWeekDay(date) {
+    const days = ['НД', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ']; [cite_start]// [cite: 871]
+    return days[date.getDay()]; [cite_start]// [cite: 509]
+}
+const testDate2C = new Date(2023, 4, 10); // 10 травня 2023 - СР
+document.getElementById('weekday_output_c').textContent = getWeekDay(testDate2C); [cite_start]// [cite: 874, 875]
+
+// --- Завдання 3: getLastDayOfMonth(year, month) ---
+function getLastDayOfMonth(year, month) {
+    [cite_start]// Використовуємо автокорекцію: 0 день наступного місяця [cite: 553, 572, 876]
+    const date = new Date(year, month + 1, 0); 
+    return date.getDate(); [cite_start]// [cite: 504]
+}
+document.getElementById('lastday_output_c').textContent = getLastDayOfMonth(2023, 0); // 0 = Січень
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>ЛР2</title>
+    <style>
+        body { font-family: Georgia; max-width: 650px; margin: 40px auto; padding: 25px; background: #f0f8ff; }
+        .exercise { background: white; margin: 25px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn { background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1 style="color: #2c3e50; text-align: center;">Лабораторна №2 - Виконав: Студент 2</h1>
+
+    <div class="exercise">
+        <h3>▶ Завдання 1 - Привітання користувача</h3>
+        <button class="btn" onclick="exercise1()">Запустити</button>
+        <div id="output1" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="exercise">
+        <h3>▶ Завдання 2 - Обчислення року народження</h3>
+        <button class="btn" onclick="exercise2()">Запустити</button>
+        <div id="output2" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="exercise">
+        <h3>▶ Завдання 3 - Формування повного імені</h3>
+        <button class="btn" onclick="exercise3()">Запустити</button>
+        <div id="output3" style="margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        function exercise1() {
+            const userName = prompt("Будь ласка, напишіть своє ім'я:");
+            if (userName) {
+                const message = `Hello, ${userName}! Welcome to JavaScript`;
+                alert(message);
+                document.getElementById('output1').innerHTML = `<b>Результат:</b> ${message}`;
+            }
+        }
+
+        function exercise2() {
+            const userAge = prompt("Скільки вам років?");
+            if (userAge && !isNaN(userAge)) {
+                const currentYear = new Date().getFullYear();
+                const birthYear = currentYear - parseInt(userAge);
+                const result = `You were born in ${birthYear}`;
+                alert(result);
+                document.getElementById('output2').innerHTML = `<b>Результат:</b> ${result}`;
+            }
+        }
+
+        function exercise3() {
+            const firstName = prompt("Ваше ім'я:");
+            const lastName = prompt("Ваше прізвище:");
+            if (firstName && lastName) {
+                const fullName = `Your full name is ${firstName} ${lastName}`;
+                console.log(fullName);
+                document.getElementById('output3').innerHTML = `<b>Результат:</b> ${fullName} (перевірте консоль)`;
+            }
+        }
+    </script>
+</body>
+</html>

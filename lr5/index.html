@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна 7 (Варіант 13)</title>
+    <style>
+        body { font-family: 'Times New Roman', serif; background-color: #fafafa; padding: 10px; }
+        .block-title { color: #5d4037; border-bottom: 1px dashed #d7ccc8; margin-top: 25px; padding-bottom: 5px; }
+        .ctrl-input { border: 1px dashed #a1887f; padding: 4px; }
+        .small-btn { background-color: #8d6e63; color: white; border: none; padding: 5px 10px; cursor: pointer; font-size: 12px; }
+        .info-status { color: #a1887f; font-size: 14px; }
+        .radio-set label { margin-right: 15px; font-style: italic; }
+        .captcha-display { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+        .nav-link13 { color: #8d6e63; margin-right: 20px; text-decoration: none; cursor: pointer; }
+        .nav-link13[style*="hidden"] { visibility: hidden !important; }
+    </style>
+</head>
+<body>
+
+    <div class="task-block">
+        <h3 class="block-title">1. Конвертер</h3>
+        <label for="f13">F:</label>
+        <input type="number" id="f13" class="ctrl-input" oninput="convert('F')">
+        <label for="c13">C:</label>
+        <input type="number" id="c13" class="ctrl-input" oninput="convert('C')">
+    </div>
+
+    <div class="task-block">
+        <h3 class="block-title">2 & 3. Множення</h3>
+        <p id="score13" class="info-status"></p>
+        <button onclick="newQ13()" class="small-btn">Наступне завдання</button>
+        <p id="q13"></p>
+        <div id="options13" class="radio-set"></div>
+        <p id="res13"></p>
+    </div>
+
+    <div id="rotator13" class="task-block">
+        <h3 class="block-title">4. Галерея: Меблі</h3>
+    </div>
+    
+    <div class="task-block">
+        <h3 class="block-title">5. CAPTCHA</h3>
+        <p>Введіть число:</p>
+        <div id="captcha-display13" class="captcha-display"></div>
+        <input type="number" id="captcha-input13" class="ctrl-input">
+        <button onclick="checkC13()" class="small-btn">Перевірити</button>
+        <p id="captcha-result13"></p>
+    </div>
+
+<script>
+// --- Завдання 1: Конвертер температур ---
+function convert(src) {
+    const f = document.getElementById('f13');
+    const c = document.getElementById('c13');
+    const val = parseFloat(src === 'F' ? f.value : c.value);
+
+    if (!isNaN(val)) {
+        if (src === 'F') {
+            c.value = ((5 / 9) * (val - 32)).toFixed(0);
+        } else {
+            f.value = ((val * 9 / 5) + 32).toFixed(0);
+        }
+    }
+}
+convert('F');
+
+// --- Завдання 2 & 3: Тест множення (Радіокнопки) ---
+let total = 0, correct = 0, ans = 0, isChecked = false;
+
+function generateOptions13_v3(correctAnswer) {
+    ans = correctAnswer;
+    isChecked = false;
+    document.getElementById('res13').textContent = '';
+    document.getElementById('res13').removeAttribute('style');
+    const answers = new Set([correctAnswer]);
+    while (answers.size < 4) {
+        answers.add(Math.floor(Math.random() * 81) + 4);
+    }
+    const answersArray = Array.from(answers).sort(() => Math.random() - 0.5);
+    const optionsEl = document.getElementById('options13');
+    optionsEl.innerHTML = '';
+
+    answersArray.forEach((a) => {
+        optionsEl.innerHTML += `<label><input type="radio" name="q13_ans" value="${a}" onchange="checkAns13(this)">${a}</label>`;
+    });
+}
+
+function newQ13() {
+    const a = Math.floor(Math.random() * 9) + 2;
+    const b = Math.floor(Math.random() * 9) + 2;
+    document.getElementById('q13').textContent = `${a} × ${b} = ?`;
+    generateOptions13_v3(a * b);
+    updateScore13();
+}
+
+function checkAns13(radio) {
+    if (isChecked) return; 
+    isChecked = true;
+    total++;
+
+    if (parseInt(radio.value) === ans) {
+        correct++;
+        document.getElementById('res13').textContent = 'Correct!';
+        document.getElementById('res13').style.color = 'green';
+    } else {
+        document.getElementById('res13').textContent = `Помилка, відповідь: «${ans}»`;
+        document.getElementById('res13').style.color = 'red';
+    }
+
+    document.querySelectorAll('#options13 input[type="radio"]').forEach(r => r.disabled = true);
+    updateScore13();
+}
+
+function updateScore13() {
+    const p = total === 0 ? 0 : Math.round((correct / total) * 100);
+    document.getElementById('score13').textContent = `Рахунок: ${p}% (${correct}/${total})`;
+}
+
+newQ13();
+
+
+// --- Завдання 4: Ротатор зображень (Меблі) ---
+let imagesArray13 = [
+    {path: 'images/furniture_001.jpg', title: 'Сучасний диван', description: 'Модульний диван з велюровою оббивкою.'},
+    {path: 'images/furniture_002.jpg', title: 'Робочий стіл', description: 'Стіл з натурального дерева для офісу.'},
+    {path: 'images/furniture_003.jpg', title: 'Кухонний гарнітур', description: 'Мінімалістичні шафи з глянцевим покриттям.'}
+]; 
+
+function initRotator13(id, arr) {
+    const c = document.getElementById(id);
+    let i = 0;
+
+    const counter = document.createElement('div');
+    const img = document.createElement('img');
+    const title = document.createElement('p');
+    const desc = document.createElement('p');
+    const navDiv = document.createElement('div');
+    const prev = document.createElement('a');
+    const next = document.createElement('a');
+
+    img.style.maxWidth = '100%';
+    img.style.height = 'auto';
+    img.style.border = '2px solid #3e2723';
+    
+    prev.textContent = 'Назад';
+    next.textContent = 'Вперед';
+    prev.classList.add('nav-link13');
+    next.classList.add('nav-link13');
+
+    const render = () => {
+        const item = arr[i];
+        img.src = item.path;
+        title.textContent = item.title;
+        desc.textContent = item.description;
+        counter.textContent = `Фотографія ${i + 1} з ${arr.length}`;
+
+        prev.style.visibility = i === 0 ? 'hidden' : 'visible';
+        next.style.visibility = i === arr.length - 1 ? 'hidden' : 'visible';
+    };
+
+    prev.addEventListener('click', () => { i > 0 && (i--, render()); });
+    next.addEventListener('click', () => { i < arr.length - 1 && (i++, render()); });
+    
+    c.appendChild(counter);
+    c.appendChild(img);
+    navDiv.appendChild(prev);
+    navDiv.appendChild(next);
+    c.appendChild(navDiv);
+    c.appendChild(title);
+    c.appendChild(desc);
+
+    render();
+}
+
+initRotator13('rotator13', imagesArray13);
+
+
+// --- Завдання 5: CAPTCHA ---
+let captchaValue = '';
+
+function initC13(n) {
+    let str = '';
+    for (let i = 0; i < n; i++) {
+        str += Math.floor(Math.random() * 10).toString();
+    }
+    captchaValue = str;
+    const d = document.getElementById('captcha-display13');
+    d.innerHTML = '';
+    
+    for (const char of str) {
+        const s = document.createElement('span');
+        s.textContent = char;
+        s.style.marginRight = '8px';
+        s.style.color = `hsl(${Math.random() * 360}, 60%, 40%)`;
+        s.style.textShadow = '1px 1px #fff';
+        d.appendChild(s);
+    }
+}
+
+function checkC13() {
+    const input = document.getElementById('captcha-input13');
+    const result = document.getElementById('captcha-result13');
+
+    if (input.value === captchaValue) {
+        result.textContent = 'Успіх.';
+        result.style.color = 'green';
+    } else {
+        result.textContent = 'Помилка';
+        result.style.color = 'red';
+    }
+    input.value = '';
+    initC13(4);
+}
+
+initC13(4);
+</script>
+</body>
+</html>
