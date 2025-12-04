@@ -1,27 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Buttons</title>
+    <title>Посилання на Лабораторні Роботи</title>
     <style>
+        /* Стилі для основного контейнера */
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            display: flex; /* Вмикає гнучке розташування елементів */
+            flex-direction: column; /* Розташовує елементи вертикально */
+            align-items: center; /* Центрує елементи по горизонталі */
+            gap: 15px; /* Відстань між кнопками */
+            padding: 30px;
+            background-color: #f4f4f9; /* Світлий фон сторінки */
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+
+        /* Стилі для посилань-кнопок */
+        .lab-link {
+            /* Перетворює посилання в елемент блоку, щоб можна було задати розміри */
+            display: block; 
+            text-decoration: none; /* Прибирає підкреслення */
+            color: #ffffff; /* Колір тексту білий */
+            background-color: #007bff; /* Основний синій колір кнопки */
+            padding: 12px 25px;
+            border-radius: 8px; /* Заокруглені кути */
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            width: 250px; /* Фіксована ширина */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легка тінь */
+            transition: background-color 0.3s ease, transform 0.1s ease; /* Плавний перехід при наведенні */
+        }
+
+        /* Стилі при наведенні курсору */
+        .lab-link:hover {
+            background-color: #0056b3; /* Темніший синій при наведенні */
+            transform: translateY(-2px); /* Трохи піднімає кнопку */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Стилі при натисканні */
+        .lab-link:active {
+            transform: translateY(0); /* Повертає на місце */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #004085;
         }
     </style>
 </head>
 <body>
-    <button>Button 1</button>
-    <button>Button 2</button>
-    <button>Button 3</button>
-</body>
+    <a href="#" class="lab-link">Лабораторна Робота №1</a>
+    
+    <a href="#" class="lab-link">Лабораторна Робота №2</a>
+    
+    <a href="#" class="lab-link">Лабораторна Робота №3</a>
+
+    </body>
 </html>
